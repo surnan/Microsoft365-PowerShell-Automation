@@ -1,141 +1,210 @@
-# PowerShell Scripts
-## Exchange 
+# Microsoft 365 & Entra ID PowerShell Automation
 
-* Get_EnabledUsersLastSignInDevice.ps1
-  - Prompt for Input: Number of days to Query
-  - Output: console & csv file appended with timestamp
-      - User DisplayName
-      - Last Sign-In timestamp
-      - Device Name
-      - Operating System
-  - Purpopse: 
-      - Retrieve succesful login details for all enabled users
+A collection of PowerShell scripts developed to streamline Microsoft 365 administration, investigate sign-in activity, review access, and generate audit-ready reports.
 
-* Get_EntraDevices.ps1
-  - Prompt for Input: Choose between: {Owner, Days Inactive, Device Name}
-  - Output: console & csv file appended with timestamp
-      - User DisplayName
-      - Device Name
-      - Boolean: User Account Enabled?
-      - Boolean: Is device Intune compliant?
-      - Days since last login
-  - Purpopse: 
-      - Retrieve all devices that are being used for authentication (non-mobile)
+**Technologies:** PowerShell · Microsoft Graph · Microsoft Entra ID · Exchange Online · Microsoft Teams
 
-* Get_EntraGroup_Members.ps1
-  - Prompt for Input: group email address.  Can be primary or secondary.
-  - Output: console & csv file appended with timestamp
-      - Display Name
-      - Primary Email Address
-      - Group Type: Distribution, Security, etc...
-      - Boolean: Mail-Enabled?
-      - Boolean: Security-Enabled?
-      - Every Alias Email Address
-      - Table with Every Member's:
-          - Display Name
-          - UPN: Login Email (entra)
-          - Primary Email Address
-          - Member Type: User or Group
-  - Purpose: Retrieve every member of group
+## Highlights
 
-* Get_EntraUser_Details.ps1
-  - Prompt for Input: user email address.  Can be primary or secondary.
-  - Output: console & csv file appended with timestamp
-      - Display Name
-      - UPN
-      - Primary Email Address
-      - Job Title
-      - Timestamp for Account Creation
-      - Every Alias Email Address
-      - Group Membership Count
-      - Table of every Group Membership:
-          - Display Name
-          - Group Type
-          - How is membership obtained?  Directly or via Nested
+- **Identity and access:** Review user details, group membership, and account creation.
+- **Security and devices:** Investigate sign-ins, device activity, and compliance.
+- **Mailbox and collaboration:** Audit inbox rules, delegated mailbox access, and Teams memberships.
+- **Offboarding:** Flag disabled accounts with potentially unnecessary licenses or memberships.
+- **Reporting:** Display results in the console and export timestamped CSV files.
 
-* Get_EntraUser_LastSignIn_Device.ps1
-  - Prompt for Input: Number of days to Query
-  - Output: console & csv file appended with timestamp
-      - User DisplayName
-      - Last Sign-In timestamp
-      - Device Name
-      - Operating System
-  - Purpopse: 
-      - Retrieve succesful login details for all users (enabled & disabled)
+## Script directory
 
-* Get_EntraUsersByCreatedDate.ps1
-  - Prompt for Input: Start Date in (MM-DD-YYYY) format
-      - Blank = today
-  - Prompt for Input: End Date in (MM-DD-YYYY) format
-      - Blank = today
-  - Output: console & csv file appended with timestamp
-      - Display in table:
-          - Display Nam
-          - UPN
-          - Job Title
-          - Account's creation date/time
-  - Purpose: 
-        - Retrieve all user accounts created within specified time period
+| Script | Purpose |
+| --- | --- |
+| [Get_EnabledUsersLastSignInDevice.ps1](Get_EnabledUsersLastSignInDevice.ps1) | Recent successful sign-ins and devices for enabled users |
+| [Get_EntraDevices.ps1](Get_EntraDevices.ps1) | Device ownership, activity, and Intune compliance |
+| [Get_EntraGroup_Members.ps1](Get_EntraGroup_Members.ps1) | Group properties and members |
+| [Get_EntraUser_Details.ps1](Get_EntraUser_Details.ps1) | User details and direct or nested group memberships |
+| [Get_EntraUser_LastSignIn_Device.ps1](Get_EntraUser_LastSignIn_Device.ps1) | Sign-in and device information across enabled and disabled accounts |
+| [Get_EntraUsersByCreatedDate.ps1](Get_EntraUsersByCreatedDate.ps1) | Accounts created in a specified date range |
+| [Get_OffboardingExceptions.ps1](Get_OffboardingExceptions.ps1) | Disabled-account license and membership exceptions |
+| [Get_TeamsUserMemberships.ps1](Get_TeamsUserMemberships.ps1) | Teams roles and channel memberships |
+| [Get_UserInboxRules.ps1](Get_UserInboxRules.ps1) | Inbox rules, forwarding, and redirects |
+| [Get_UserLoginActivity.ps1](Get_UserLoginActivity.ps1) | Successful user sign-in events |
+| [Get_UserMailboxPermissions.ps1](Get_UserMailboxPermissions.ps1) | Mailbox access granted to a user |
 
-* Get_OffboardingExceptions.ps1
-  - No Prompt
-  - Output: console & csv file appended with timestamp
-      - Display in table:
-          - Display Name
-          - UPN
-          - Count of Email addresses still on account
-          - Count of Group memberships
-          - Count of licenses
-          - Boolean: enabled?
-              -- just confirming acc't is disabled
-  - Purpose: 
-          - Any disabled user accounts tying up extra licenses, improper group memberships, unnecessary group memberships?
+## Script details
 
-* Get_TeamsUserMemberships.ps1
-  - Prompt for Input: email address (Primary or secondary email address)
-  - Output: console & csv file appended with timestamp
-      - Display in table:
-          - TeamName
-          - Team Role (owner, member)
-      - Display in table:
-          - Team Name
-          - Channel Name
-      - Purpose:
-          - Getting all the Teams information for a user.  Makes it easier to have checklist to assign to new colleague joining their department
+### Entra ID — Identity and groups
 
-* Get_UserInboxRules.ps1
-  - Prompt for Input: email address (Primary or secondary email address)
-  - Output: console & csv file appended with timestamp
-      - Display in table for each rule:
-          - Name
-          - Boolean: Enabled?
-          - Priority
-          - Forwarding To Email Address
-          - Redirect To Email Address
-          - Description
-      - Purpose:
-          - Get all the rules on user's mailbox
+<details>
+<summary><strong>Get_EntraUser_Details.ps1</strong> — User and group audit</summary>
 
-* Get_UserLoginActivity.ps1
-  - Prompt for Input: email address (Primary or secondary email address)
-  - Prompt for Input: How many days deep to dig into logs?
-  - Output: console & csv file appended with timestamp
-      - Display in table, each succesful login:
-          - Timestamp
-          - Application
-          - IP Address
-          - Appliction Type
-          - Operating System
-  - Purpose:
-      - Retrieve all the succesful login attempts for a user account
+**Purpose:** Retrieve user account properties and direct or nested group membership relationships.
 
-* Get_UserMailboxPermissions.ps1
-  - Prompt for Input: email address (Primary or secondary email address)
-  - Output: console & csv file appended with timestamp
-      - Retrieve all security group memberships
-      - Display in table, each mailbox user has rights to:
-          - Mailbox Email address
-          - Access granted directly or inherited
-          - Access granted at user account or at group level
-  - Purpose:
-      - What mailboxes can user access?
+**Input:** User email address (primary or alias).
+
+**Output:** Display name, UPN, primary email, job title, account creation time, aliases, group membership count, group names and types, and direct/nested membership information.
+
+**Use case:** Access reviews and user-permission investigations.
+</details>
+
+<details>
+<summary><strong>Get_EntraGroup_Members.ps1</strong> — Group membership audit</summary>
+
+**Purpose:** Retrieve a group's properties and its members.
+
+**Input:** Group email address (primary or alias).
+
+**Output:** Group name, primary email, group type, mail/security-enabled status, aliases, and member display names, UPNs, primary emails, and types (user/group).
+
+**Use case:** Group membership validation and access reviews.
+</details>
+
+<details>
+<summary><strong>Get_EntraUsersByCreatedDate.ps1</strong> — Account creation audit</summary>
+
+**Purpose:** Find user accounts created during a specified period.
+
+**Input:** Start and end dates in `MM-DD-YYYY` format; blank values default to today.
+
+**Output:** Display name, UPN, job title, and account creation date/time.
+
+**Use case:** Onboarding audits and account inventory.
+</details>
+
+### Entra ID — Devices and sign-ins
+
+<details>
+<summary><strong>Get_EntraDevices.ps1</strong> — Device inventory</summary>
+
+**Purpose:** Review Entra ID device information and status.
+
+**Input:** Select owner, days inactive, or device name.
+
+**Output:** User display name, device name, user-account enabled status, Intune compliance status, and days since last activity.
+
+**Use case:** Device inventory, inactivity checks, and compliance reviews.
+</details>
+
+<details>
+<summary><strong>Get_EnabledUsersLastSignInDevice.ps1</strong> — Enabled-user sign-ins</summary>
+
+**Purpose:** Retrieve recent successful sign-in and device information for enabled accounts.
+
+**Input:** Number of days to query.
+
+**Output:** Display name, last successful sign-in timestamp, device name, and operating system.
+
+**Use case:** Authentication and device activity reviews for active accounts.
+</details>
+
+<details>
+<summary><strong>Get_EntraUser_LastSignIn_Device.ps1</strong> — User sign-ins</summary>
+
+**Purpose:** Review recent successful sign-ins across enabled and disabled user accounts.
+
+**Input:** Number of days to query.
+
+**Output:** Display name, last successful sign-in timestamp, device name, and operating system.
+
+**Use case:** Broader authentication investigations and account reviews.
+</details>
+
+<details>
+<summary><strong>Get_UserLoginActivity.ps1</strong> — Login investigation</summary>
+
+**Purpose:** Retrieve successful login events for a specified account.
+
+**Input:** User email address (primary or alias), plus number of days to query.
+
+**Output:** Timestamp, application, IP address, application type, and operating system.
+
+**Use case:** Investigate user authentication patterns.
+</details>
+
+### Exchange Online — Mailboxes
+
+<details>
+<summary><strong>Get_UserInboxRules.ps1</strong> — Inbox rule audit</summary>
+
+**Purpose:** Review mailbox inbox rules, including mail forwarding and redirection.
+
+**Input:** User email address (primary or alias).
+
+**Output:** Rule name, enabled status, priority, forwarding destination, redirect destination, and description.
+
+**Use case:** Mail-flow troubleshooting and suspicious-rule investigations.
+</details>
+
+<details>
+<summary><strong>Get_UserMailboxPermissions.ps1</strong> — Mailbox access audit</summary>
+
+**Purpose:** Identify mailboxes accessible to a selected user.
+
+**Input:** User email address (primary or alias).
+
+**Output:** Security group memberships, accessible mailboxes, and whether access is direct/inherited or user/group assigned.
+
+**Use case:** Delegated-access reviews and permission audits.
+</details>
+
+### Microsoft Teams — Collaboration
+
+<details>
+<summary><strong>Get_TeamsUserMemberships.ps1</strong> — Teams and channels</summary>
+
+**Purpose:** Retrieve a user's Microsoft Teams memberships and channel information.
+
+**Input:** User email address (primary or alias).
+
+**Output:** Team name, team role (owner/member), and team/channel names.
+
+**Use case:** Onboarding checklists and Teams access documentation.
+</details>
+
+### Account lifecycle — Offboarding
+
+<details>
+<summary><strong>Get_OffboardingExceptions.ps1</strong> — Offboarding exceptions</summary>
+
+**Purpose:** Identify disabled accounts retaining licenses, email addresses, or group memberships that may warrant review.
+
+**Input:** None.
+
+**Output:** Display name, UPN, email-address count, group-membership count, license count, and enabled status.
+
+**Use case:** Offboarding quality checks and potential license recovery.
+</details>
+
+> **Reporting:** Scripts are intended to produce console output and timestamped CSV reports. Verify the precise columns and behavior in each script before running it.
+
+## Requirements
+
+- Windows PowerShell 5.1 or PowerShell 7, depending on the script.
+- Access to the relevant Microsoft 365 tenant and appropriate permissions.
+- Modules as required by the script, potentially including **Microsoft Graph PowerShell SDK**, **ExchangeOnlineManagement**, and **MicrosoftTeams**.
+
+Check each script for its exact PowerShell version, module dependencies, and Graph/API permissions; requirements vary.
+
+## Getting started
+
+Clone the repository:
+
+```powershell
+git clone https://github.com/surnan/PS_public.git
+cd PS_public
+```
+
+Run an example script from the repository directory:
+
+```powershell
+.\Get_EntraUser_Details.ps1
+```
+
+Follow its prompts and sign in with an account authorized to access the requested data.
+
+## Output and security
+
+Reports can include account identifiers, membership details, device information, IP addresses, and authentication events. Protect exported CSV files, avoid committing sensitive data or credentials, and review scripts in a test environment before production use.
+
+## About
+
+This repository is part of my IT administration and automation portfolio. These scripts address recurring operational tasks encountered while administering Microsoft 365 environments, with an emphasis on **identity management, security auditing, access reviews, and repeatable reporting**.
+
+**Author:** Suresh Nandlall · [GitHub profile](https://github.com/surnan)
